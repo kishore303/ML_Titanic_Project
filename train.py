@@ -1,8 +1,8 @@
 import joblib
-import os
 import pandas as pd
 import seaborn as sns
-
+import os
+from sklearn.datasets import fetch_openml
 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -10,25 +10,19 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler,OrdinalEncoder
 from sklearn.linear_model import LogisticRegression
 
-
-
-
-df=sns.load_dataset("titanic")
+df = fetch_openml(name="titanic", version=1, as_frame=True).frame
 
 df=df[["pclass","sex","age","fare","survived"]]
 df["age"]=df["age"].fillna(df["age"].median())
 x=df.drop("survived",axis=1)
 y=df["survived"]
 numeric_features=["age","fare"]
-categorical_features=["sex","pcalss"]
+categorical_features=["sex","pclass"]
 
 numeric_pipeline=Pipeline([
     ("imputer",SimpleImputer(strategy="median")),
     ("scalar",StandardScaler())
 ])
-
-
-
 
 #------------------
 # CATEGORICAL PIPELINE
@@ -43,9 +37,6 @@ categorical_pipeline=Pipeline([
 # COMBINE
 #----------------------
 
-# Correcting the typo in categorical_features for this cell's execution
-categorical_features=["sex","pclass"]
-
 preprocessor=ColumnTransformer([
     ("num",numeric_pipeline,numeric_features),
     ("cat",categorical_pipeline,categorical_features)
@@ -54,7 +45,6 @@ preprocessor=ColumnTransformer([
 #--------------------
 # FINAL PIPELINE
 #--------------------
-
 
 pipeline=Pipeline([
     ("preprocessor",preprocessor),
@@ -68,4 +58,3 @@ os.makedirs("model",exist_ok=True)
 
 joblib.dump(pipeline,"model/pipeline.pkl")
 print("pipeline saved successfully")
-
