@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
 
-pipeline = joblib.load("models/pipeline.pkl")
+pipeline = joblib.load("model/pipeline.pkl")
 
 def predict(data: dict):
     df = pd.DataFrame([data])
