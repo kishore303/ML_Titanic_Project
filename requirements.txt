@@ -25,3 +25,8 @@ uvicorn==0.34.0
 #pydantic
 #scikit-learn
 #uvicorn
+
+
+
+
+#this is for fetch comment
